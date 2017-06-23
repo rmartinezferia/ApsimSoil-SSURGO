@@ -14,9 +14,6 @@ download_SSURGO <- function(SiteName = "field2",
                             soilLayer_breaks = c(1,5,10,20,30,50,80,120,160,200),
                             interpolation_Method = c("linear", "constant")) {
   
-  
-  #SiteName = "field1";north=42.010759;south=42.01000;east=-93.740682;west=-93.741712;map=T
-  
   # Load packages
   require(sp)
   require(FedData)
@@ -27,7 +24,7 @@ download_SSURGO <- function(SiteName = "field2",
                            proj4string="+proj=longlat")
   
   x <- get_ssurgo(template=a, label=SiteName)
-  
+
   
   # Extract useful data #############################
   
@@ -105,13 +102,13 @@ download_SSURGO <- function(SiteName = "field2",
       #soil$ll.sr <- SaxtonRawls(pSand=soil$sand ,pClay=soil$clay, pOM=soil$om)$LL15
       #soil$dul.sr <- SaxtonRawls(pSand=soil$sand ,pClay=soil$clay, pOM=soil$om)$DUL
       
-      soil$ksat <- soil$ksat*1000/1.157 # mm/day
+      soil$ksat <- soil$ksat*100/1.157 # mm/day
       
       soil$sat <- SaxtonRawls(pSand=soil$sand ,pClay=soil$clay, pOM=soil$om)$SAT/100
       
       soil$ph <- 0.52+1.06*soil$ph #pH 1:5
       
-      soil$oc <- soil$om/1.72 # %
+      soil$OC <- soil$om/1.72 # %
       
       soil$U <- ifelse(soil$clay<=20,5+0.175*soil$clay,
                     ifelse(soil$clay<=40,7.5+0.05*soil$clay,
@@ -119,21 +116,22 @@ download_SSURGO <- function(SiteName = "field2",
                                   ifelse(soil$clay<=70,12.75-0.075*soil$clay,
                                          ifelse(soil$clay<=80,11-0.05*soil$clay,0))))) # mm
       
-      soil$conna <- ifelse(soil$clay<=30,0.025*soil$clay+3.25,
+      soil$cona <- ifelse(soil$clay<=30,0.025*soil$clay+3.25,
                         ifelse(soil$clay<=50,4,
                                ifelse(soil$clay<=70,-0.025*soil$clay+5.25,
                                       ifelse(soil$clay<=80,3.5,0)))) # mm/d^5
       soil$PO <- 1-soil$bd/2.65
-      soil$salb <- 0.13
       
-      soil$FINERT <- ifelse(soil$center<=1,0.4,
+      soil$Salb <- 0.13
+      
+      soil$FInert <- ifelse(soil$center<=1,0.4,
                          ifelse(soil$center<=10,0.4,
                                 ifelse(soil$center<60,0.008*soil$center+0.32,
                                        ifelse(soil$center<=120,0.8,
                                               ifelse(soil$center<180,0.0032*soil$center+0.42,
                                                      ifelse(soil$center<=300,0.99,0)))))) #(0-1)
       
-      soil$FBIOM <- ifelse(soil$center<=10,0.04,
+      soil$FBiom <- ifelse(soil$center<=10,0.04,
                         ifelse(soil$center<=20,0.055-0.0015*soil$center,
                                ifelse(soil$center<=30,0.03-0.0005*soil$center,
                                       ifelse(soil$center<60,0.0216-0.0002*soil$center,
@@ -149,9 +147,9 @@ download_SSURGO <- function(SiteName = "field2",
       
       soil$DiffusSlope <- 16
       
-      soil$CnRed <- 20 #residue runoff
+      soil$CNRed <- 20 #residue runoff
       
-      soil$CnCov	 <- 0.8
+      soil$CNCov	 <- 0.8
       
       soil$EnrAcoeff	<- 7.4
       
@@ -171,29 +169,16 @@ download_SSURGO <- function(SiteName = "field2",
       
       soil$AirDry <- ifelse(soil$center<=15,0.5,ifelse(soil$center<=30,0.9,1))*soil$ll
       
+      
       # Bin by layer
       
       soil$layer <- .bincode(soil$center, breaks=c(-1,soilLayer_breaks[soilLayer_breaks>0]))
       
       soil %>%
+        select(-hydrogroup) %>%
         group_by(layer) %>%
-        summarise(top=min(center),
-                  bottom=max(center),
-                  area=mean(area),
-                  sand=mean(sand),
-                  clay=mean(clay),
-                  bd=mean(bd),
-                  ll=mean(ll),
-                  dul=mean(dul),
-                  ksat=mean(ksat),
-                  sat=mean(sat),
-                  oc=mean(oc),
-                  ph=mean(ph),
-                  FBIOM=mean(FBIOM),
-                  FINERT=mean(FINERT),
-                  U = mean(U)
-                  conna = mean(conna)
-                  ) -> soil
+        mutate(thick = (max(center)-min(center))*10) %>%
+        summarise_all("mean") -> soil
       
       
       # Save df into list ###########
@@ -205,7 +190,8 @@ download_SSURGO <- function(SiteName = "field2",
   
   names(soils) <- (unique(h$name))
   
-  return(soils)
+  return(list(coordinates = c(mean(north,south),mean(east,west)),
+              soils = soils))
 }
 
 ### Example 
