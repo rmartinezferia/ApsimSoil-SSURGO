@@ -175,7 +175,7 @@ download_SSURGO <- function(SiteName = "field2",
       soil$layer <- .bincode(soil$center, breaks=c(-1,soilLayer_breaks[soilLayer_breaks>0]))
       
       soil %>%
-        select(-hydrogroup) %>%
+        dplyr::select(-hydrogroup) %>%
         group_by(layer) %>%
         mutate(thick = (max(center)-min(center))*10) %>%
         summarise_all("mean") -> soil
@@ -195,5 +195,5 @@ download_SSURGO <- function(SiteName = "field2",
 }
 
 ### Example 
-#soils <-  download_SSURGO(SiteName = "field2",north=42.010759,south=42.01000,east=-93.740682,west=-93.741712)
-#View(soils[2])
+soils <-  download_SSURGO(SiteName = "field2",north=42.010759,south=42.01000,east=-93.740682,west=-93.741712)
+View(soils[2])
