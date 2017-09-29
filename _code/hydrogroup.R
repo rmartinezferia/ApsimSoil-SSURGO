@@ -1,4 +1,6 @@
 # Runoff hydological groups table
+# A group of soils having similar runoff potential under similar storm and cover conditions.
+# Examples are A and A/D. (NSSH)
 
 require(tidyr)
 hydrogroup <- data.frame(matrix(data=c(61,64,68,71,73,76,80,83,81,84,88,91,84,87,91,94),
