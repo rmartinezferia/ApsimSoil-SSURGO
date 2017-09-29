@@ -1,6 +1,6 @@
 # ApsimSoil-SSURGO
 
-This repo contains R code for downloading soils data from [SSURGO database](https://websoilsurvey.nrcs.usda.gov) and converting it into [APSIM](https://http://www.apsim.info/) format.
+This repo contains R code for downloading soils data from [SSURGO database](https://websoilsurvey.nrcs.usda.gov) and converting it into [APSIM](https://www.apsim.info/) format.
 
 Code here relies heavily on the [FedData](https://cran.r-project.org/web/packages/FedData/index.html) package. APSIM parameter set estimation follows the approach described by [Archontoulis et al. (2014, Agron. J. 106(3):1025-1040)](https://dl.sciencesocieties.org/publications/aj/abstracts/106/3/1025?access=0&view=pdf).
 
@@ -12,7 +12,7 @@ Before using this function, make sure you have installed the following packages:
 install.packages(c("sp","FedData","raster","tidyverse","ggthemes"))
 ```
 
-You will need to define the soil layer structure using the `soilLayer_breaks` arguement. Latitudinal extent of the area of interest is defined in the `north` and `south` arguements. Longitudinal extent of the area of interest is defined in the `east` and `west`.
+You will need to define the soil layer structure using the `soilLayer_breaks` arguement. Latitudinal extent of the area of interest is defined in the `north` and `south` arguements. Longitudinal extent of the area of interest is defined in the `east` and `west` arguements.
 
 ```{r}
 source("_code/downloadSSURGO.R")
@@ -26,7 +26,6 @@ h <- downloadSSURGO(SiteName = "ISU Sorenson",
                     east=-93.737968, # Longitude
                     west=-93.742707, # Longitude
                     map = TRUE) 
-
 ````
 The function will return a list of objects inclding: `site_name`, field centroid `coordinates`. 
 ```{r}
@@ -43,7 +42,7 @@ h$map
 ```
 ![](_figures/map.png)
 
-The `soils` object contains a list of each soil types, with the relative area each soil type occupies in the field, and a table for the APSIM-relevant variables interportated according to the defined layer structure. Use this table to set up APSIM.
+The `soils` object contains a list with information for each soil type including the with the relative field area and a table for the APSIM-relevant variables. These are interportated according to the defined layer structure. This data will be used to set up APSIM soil profiles.
 
 ```{r}
 h$soils$Canisteo$area
