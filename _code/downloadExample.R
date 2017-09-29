@@ -1,18 +1,26 @@
 # Example of function that downloads the SSURGO database for a field extent 
 
 #install.packages("FedData")
-require(tidyverse)
-source("_code/download_ssurgo.R")
+source("_code/downloadSSURGO.R")
 
 # (down)load ssurgo data
-h <- download_SSURGO(SiteName = "Sorenson", 
-                     # Set soil layer structure
-                     soilLayer_breaks = c(5,20,50,80,120,180), 
-                     # Set field extent (in Decimal Degrees)
-                     north=42.010759, # Latitude
-                     south=42.01000,  # Latitude
-                     east=-93.740682, # Longitude
-                     west=-93.741712) # Longitude
+h <- downloadSSURGO(SiteName = "ISU Sorenson", 
+                    # Set soil layer structure
+                    soilLayer_breaks = c(5,20,50,80,120,180), 
+                    # Set field extent (in Decimal Degrees)
+                    north=42.012351, # Latitude
+                    south=42.010515, # Latitude
+                    east=-93.737968, # Longitude
+                    west=-93.742707, # Longitude
+                    map = TRUE) 
+
+# Access field info
+h$site_name
+h$coordinates
+h$map
+#ggsave("_figures/map.png", width = 8, height = 3)
 
 # Access the downloaded data
 h$soils
+
+
