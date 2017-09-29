@@ -4,7 +4,7 @@ This repo contains R code for downloading soils data from [SSURGO database](http
 
 Code here relies heavily on the [FedData](https://cran.r-project.org/web/packages/FedData/index.html) package. APSIM parameter set estimation follows the approach described by [Archontoulis et al. (2014, Agron. J. 106(3):1025-1040)](https://dl.sciencesocieties.org/publications/aj/abstracts/106/3/1025?access=0&view=pdf).
 
-## download_SSURGO: Download spatial data for a field extent and return soil profiles with APSIM values
+## downloadSSURGO: (down)load spatial data for a field extent and return soil profiles with values for APSIM
 
 Before using this function, make sure you have installed the following packages:
 
@@ -15,7 +15,7 @@ install.packages(c("sp","FedData","raster","tidyverse","ggthemes"))
 You will need to define the soil layer structure using the `soilLayer_breaks` arguement. Latitudinal extent of the area of interest is defined in the `north` and `south` arguements. Longitudinal extent of the area of interest is defined in the `east` and `west`.
 
 ```{r}
-source("_code/download_ssurgo.R")
+source("_code/downloadSSURGO.R")
 
 h <- downloadSSURGO(SiteName = "ISU Sorenson", 
                     # Set soil layer structure
