@@ -9,7 +9,7 @@ Code here relies heavily on the [FedData](https://cran.r-project.org/web/package
 Before using this function, make sure you have installed the following packages:
 
 ```{r}
-install.packages(c("sp","FedData","raster","tidyverse","ggthemes"))
+install.packages(c("FedData","raster","tidyverse","ggthemes","maptools"))
 ```
 
 You will need to define the soil layer structure using the `soilLayer_breaks` arguement. Latitudinal extent of the area of interest is defined in the `north` and `south` arguements. Longitudinal extent of the area of interest is defined in the `east` and `west` arguements.

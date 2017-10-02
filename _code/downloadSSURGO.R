@@ -16,12 +16,13 @@ downloadSSURGO <- function(SiteName = "field2",
   # Check
   
   # Load packages
-  require(sp)
+  #require(sp)
   require(FedData)
   require(raster)
   require(dplyr)
   require(ggplot2)
   require(ggthemes)
+  require(maptools)
   
   a <- polygon_from_extent(extent(east, west, north, south),
                            proj4string="+proj=longlat")
@@ -110,6 +111,12 @@ downloadSSURGO <- function(SiteName = "field2",
       
       horizon$OC <- horizon$om/1.72 # %
       
+      horizon$OC <- c(horizon$OC[1],
+                      ifelse(horizon$center[-1] >= 100 & diff(horizon$OC) == 0,
+                             horizon$OC[1]*exp(horizon$center[-1]*-0.035),
+                             horizon$OC)) # exponential decay below 100 cm if data is missing
+      
+      
       horizon$U <- ifelse(horizon$clay<=20,5+0.175*horizon$clay,
                     ifelse(horizon$clay<=40,7.5+0.05*horizon$clay,
                            ifelse(horizon$clay<=50,11.5-0.05*horizon$clay,
@@ -177,16 +184,17 @@ downloadSSURGO <- function(SiteName = "field2",
       horizon$layer <- .bincode(horizon$center, breaks=c(-1,soilLayer_breaks[soilLayer_breaks>0]))
       
       horizon %>%
-        select(-hydrogroup) %>%
+        dplyr::select(-hydrogroup) %>%
         group_by(layer) %>%
-        mutate(thick = (max(center)-min(center))*10) %>%
+        mutate(thick = 10 + (max(center)-min(center))*10) %>%
         summarise_all("mean") -> horizon
       
       
       # Save df into list ###########
       
       soils[[i]] <- list(area = unique(horizon$area),
-                         horizon = data.frame(horizon %>% select(-area, -top, -bottom,-center,-slope_code,-slope)))
+                         horizon = data.frame(horizon %>% 
+                                                dplyr::select(-area, -top, -bottom,-center,-slope_code,-slope)))
       
   }
   
