@@ -3,6 +3,7 @@
 # Examples are A and A/D. (NSSH)
 
 require(tidyr)
+
 hydrogroup <- data.frame(matrix(data=c(61,64,68,71,73,76,80,83,81,84,88,91,84,87,91,94),
                             ncol = 4,nrow = 4,
                             dimnames = list(c(1,2,3,4),

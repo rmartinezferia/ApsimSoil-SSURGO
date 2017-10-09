@@ -9,13 +9,13 @@ Code here relies heavily on the [FedData](https://cran.r-project.org/web/package
 Before using this function, make sure you have installed the following packages:
 
 ```{r}
-install.packages(c("FedData","raster","tidyverse","ggthemes","maptools"))
+install.packages(c("FedData","raster","tidyverse","ggthemes","maptools","maps","XML","Hmisc","lubridate")
 ```
 
 You will need to define the soil layer structure using the `soilLayer_breaks` arguement. Latitudinal extent of the area of interest is defined in the `north` and `south` arguements. Longitudinal extent of the area of interest is defined in the `east` and `west` arguements.
 
 ```{r}
-source("_code/downloadSSURGO.R")
+source("_code/ssurgo2apsim.R")
 
 h <- downloadSSURGO(SiteName = "ISU Sorenson", 
                     # Set soil layer structure
@@ -42,7 +42,7 @@ h$map
 ```
 ![](_figures/map.png)
 
-The `soils` object contains a list with information for each soil type including the with the relative field area and a table for the APSIM-relevant variables. These are interportated according to the defined layer structure. This data will be used to set up APSIM soil profiles.
+The `soils` object contains a list with information for each soil type including the percent of the field area covered and a table for the APSIM-relevant variables. These are interportated according to the defined layer structure. This data will be used to set up APSIM soil profiles.
 
 ```{r}
 h$soils$Canisteo$area
@@ -60,6 +60,17 @@ h$soils$Canisteo$horizon
 |5|   390| 82.5| 49.00000| 15.00000| 1.600000| 1.660000| 0.2500000 |792.5670| 0.0950000 |0.2460000| 9.000000 |1.600000|
 |6|   590| 82.5| 49.00000| 15.00000| 1.600000| 1.660000| 0.2500000 |792.5670| 0.0950000 |0.2460000| 9.000000 |1.600000|
 
-## Convert downloaded data into APSIM .soils file type
+## SSURGO2APSIM: Format downloaded data into APSIM toolbox
 
-![](_figures/coming_soon.gif)
+```{r}
+
+SSURGO2APSIM(h, area_threshold = 0,)
+
+# Creating APSIM toolbox with soils that occupy an area greather than 0% of the ISU Sorenson site.
+ 
+# [1] "Canisteo: 31% of AOI"
+# [1] "Clarion: 3% of AOI"
+# [1] "Nicollet: 13% of AOI"
+# [1] "Webster: 11% of AOI"
+
+```
