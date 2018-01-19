@@ -18,13 +18,14 @@ You will need to define the soil layer structure using the `soilLayer_breaks` ar
 source("_code/ssurgo2apsim.R")
 
 h <- downloadSSURGO(SiteName = "ISU Sorenson", 
-                    # Set soil layer structure
+                    # Set soil layer structure (in cm)
                     soilLayer_breaks = c(5,20,50,80,120,180), 
                     # Set field extent (in Decimal Degrees)
                     north=42.012351, # Latitude
                     south=42.010515, # Latitude
                     east=-93.737968, # Longitude
                     west=-93.742707, # Longitude
+                    by_soil = TRUE,
                     map = TRUE) 
 ````
 The function will return a list of objects inclding: `site_name`, field centroid `coordinates`. 
@@ -64,7 +65,9 @@ h$soils$Canisteo$horizon
 
 ```{r}
 
-SSURGO2APSIM(h, area_threshold = 0,)
+SSURGO2APSIM(h, crops = c("maize","soybean"),
+             area_threshold = 0,
+             include_Swim = FALSE, include_tile = FALSE)
 
 # Creating APSIM toolbox with soils that occupy an area greather than 0% of the ISU Sorenson site.
  

@@ -46,8 +46,8 @@ SaxtonRawls <-function(pSand, pClay, pOM){
   ksat = 1930*((SAT-DUL)^(3-lambda))
   SWCON = round(0.15 + pmin(ksat,75)/100, 3)
   
-  res <- list(BD, LL15*100, DUL*100, SAT*100, SWCON*100)
-  names(res) <- c("BD", "LL15", "DUL", "SAT", "SWCON")
+  res <- list(BD, LL15*100, DUL*100, SAT*100, SWCON*100,ksat)
+  names(res) <- c("BD", "LL15", "DUL", "SAT", "SWCON","KSAT")
   
   return(res)
 }

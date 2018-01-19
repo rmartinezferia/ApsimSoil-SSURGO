@@ -5,7 +5,8 @@ source("_code/xmlCompile.R")
 
 SSURGO2APSIM <- function(data,
                          area_threshold = 0,
-                         crops = c("maize","soybean","wheat")) {
+                         crops = c("maize","soybean","wheat"),
+                         include_Swim = FALSE, include_tile = FALSE) {
   
   message(paste0("Creating APSIM toolbox with soils that occupy an area greather than ",area_threshold*100,"% of the ",data$site_name)," site.")
   
@@ -15,7 +16,7 @@ SSURGO2APSIM <- function(data,
   data$soils <- data$soils[!sapply(data$soils, is.null)] 
   names(data$soils)
   
-  out <- xmlCompile(data, crops)
+  out <- xmlCompile(data, crops, include_Swim, include_tile)
   
   writeLines(saveXML(out), paste0(data$site_name,".xml"))
 }
