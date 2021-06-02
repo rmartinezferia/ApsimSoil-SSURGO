@@ -22,7 +22,7 @@ SaxtonRawls <-function(pSand, pClay, pOM){
   LL15 = round(pmax(0.01, pmin(0.99, LL15)),3)
   
   # calc DUL (theta_33)
-  theta_33t = -0.251*pSand + 0.195*pClay + 0.11*pOM +
+  theta_33t = -0.251*pSand + 0.195*pClay + 0.011*pOM +
     0.006*pSand*pOM - 0.027*pClay*pOM + 0.452*pSand*pClay + 0.299
   #DUL = theta_33t + (1.283*theta_33t^2 - 0.374*theta_33t - 0.015)
   DUL = theta_33t + (1.283*theta_33t^2 - 0.374*theta_33t - 0.015)
